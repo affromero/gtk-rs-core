@@ -1,5 +1,10 @@
 # Rust GLib and GObject bindings
 
+This fork backports the fix for RUSTSEC-2024-0429 to GLib 0.18.5 from upstream
+commit `b5a4071e439bef2b5eea76c3aa25e5ae84839e34` (gtk-rs-core PR #1343).
+The original MIT license and authorship are preserved. The mutable C output
+pointer fix preserves the GLib 0.18 API and ABI.
+
 __Rust__ bindings and wrappers for [GLib](https://docs.gtk.org/glib/), part of [gtk-rs-core](https://github.com/gtk-rs/gtk-rs-core).
 
 GLib __2.56__ is the lowest supported version for the underlying library.

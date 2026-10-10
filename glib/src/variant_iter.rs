@@ -117,13 +117,13 @@ impl<'a> VariantStrIter<'a> {
 
     fn impl_get(&self, i: usize) -> &'a str {
         unsafe {
-            let p: *mut libc::c_char = std::ptr::null_mut();
+            let mut p: *mut libc::c_char = std::ptr::null_mut();
             let s = b"&s\0";
             ffi::g_variant_get_child(
                 self.variant.to_glib_none().0,
                 i,
                 s as *const u8 as *const _,
-                &p,
+                &mut p,
                 std::ptr::null::<i8>(),
             );
             let p = std::ffi::CStr::from_ptr(p);
@@ -353,6 +353,18 @@ mod tests {
 
         assert_eq!(iter.len(), 3);
         assert_eq!(iter.count(), 3);
+    }
+
+    #[test]
+    fn string_array_iteration_preserves_borrowed_values_from_both_ends() {
+        let variant = ["first", "middle", "last"].to_variant();
+        let mut iter = variant.array_iter_str().unwrap();
+
+        assert_eq!(iter.next(), Some("first"));
+        assert_eq!(iter.next_back(), Some("last"));
+        assert_eq!(iter.next(), Some("middle"));
+        assert_eq!(iter.next(), None);
+        assert_eq!(iter.next_back(), None);
     }
 
     #[test]
