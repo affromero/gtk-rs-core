@@ -1479,38 +1479,38 @@ mod test {
         let items = ["str1", "str2", "str3", "str4"];
 
         items[..].run_with_strv(|s| unsafe {
-            assert!(s.get_unchecked(4).is_null());
             assert_eq!(s.len(), items.len());
+            assert!(s.as_ptr().add(s.len()).read().is_null());
             let s = StrV::from_glib_borrow(s.as_ptr() as *const *const c_char);
             assert_eq!(s, items);
         });
 
         Vec::from(&items[..]).run_with_strv(|s| unsafe {
-            assert!(s.get_unchecked(4).is_null());
             assert_eq!(s.len(), items.len());
+            assert!(s.as_ptr().add(s.len()).read().is_null());
             let s = StrV::from_glib_borrow(s.as_ptr() as *const *const c_char);
             assert_eq!(s, items);
         });
 
         StrV::from(&items[..]).run_with_strv(|s| unsafe {
-            assert!(s.get_unchecked(4).is_null());
             assert_eq!(s.len(), items.len());
+            assert!(s.as_ptr().add(s.len()).read().is_null());
             let s = StrV::from_glib_borrow(s.as_ptr() as *const *const c_char);
             assert_eq!(s, items);
         });
 
         let v = items.iter().copied().map(String::from).collect::<Vec<_>>();
         items.run_with_strv(|s| unsafe {
-            assert!(s.get_unchecked(4).is_null());
             assert_eq!(s.len(), v.len());
+            assert!(s.as_ptr().add(s.len()).read().is_null());
             let s = StrV::from_glib_borrow(s.as_ptr() as *const *const c_char);
             assert_eq!(s, items);
         });
 
         let v = items.iter().copied().map(GString::from).collect::<Vec<_>>();
         items.run_with_strv(|s| unsafe {
-            assert!(s.get_unchecked(4).is_null());
             assert_eq!(s.len(), v.len());
+            assert!(s.as_ptr().add(s.len()).read().is_null());
             let s = StrV::from_glib_borrow(s.as_ptr() as *const *const c_char);
             assert_eq!(s, items);
         });
